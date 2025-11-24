@@ -2,4 +2,4 @@
 .bin/
 .vs/
 .obj/
-.AntsShooter.sln.DotSettings.user
+./AntsShooter.sln.DotSettings.user
