@@ -1,0 +1,4 @@
+
+make the player shoots
+make the player dies
+add a lifebar

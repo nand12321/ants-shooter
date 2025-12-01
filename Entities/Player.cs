@@ -51,7 +51,7 @@ public class Player : Entity
             }
         }
         
-        Console.WriteLine(isJumping);
+        // Console.WriteLine(isJumping);
     }
     
     public void HandleJump()

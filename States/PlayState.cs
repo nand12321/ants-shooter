@@ -15,6 +15,9 @@ namespace AntsShooter.States
         private Vector2 testBlockPosition;
         private List<Ant> Ants;
         private float spawnAntTimer = Globals.spawnAntTimer;
+        private List<Bullet> bullets = new();
+        private const float timeBetweenBullets = 0.3f;
+        private float bulletTimer = timeBetweenBullets;
         
         public PlayState()
         {
@@ -83,9 +86,46 @@ namespace AntsShooter.States
             }
         }
 
+        public void HandleShooting()
+        {
+            if (Raylib.IsMouseButtonDown(MouseButton.Left) && bulletTimer <= 0)
+            {
+                Vector2 mousePosition = Raylib.GetMousePosition();
+                bullets.Add(new Bullet(player.position, mousePosition));
+
+                bulletTimer = timeBetweenBullets;
+            }
+
+            if (bulletTimer > 0)
+            {
+                bulletTimer -= 1 * Raylib.GetFrameTime();
+            }
+
+            foreach (var bullet in bullets)
+            {
+                bullet.Update();
+
+                if (bullet.position.X > 10000 || bullet.position.X < -10000 ||
+                    bullet.position.Y > 1000 || bullet.position.Y < -1000)
+                {
+                    // bullets.Remove(bullet);
+                }
+            }
+            // Console.WriteLine(bullets.Count());
+        }
+
+        public void DrawBullets()
+        {
+            foreach (var bullet in bullets)
+            {
+                bullet.Draw();
+            }
+        }
+
         public void Update()
         {
             player.Update();
+            HandleShooting();
             UpdateCamera();
             UpdateAnts();
         }
@@ -95,6 +135,7 @@ namespace AntsShooter.States
             Raylib.BeginMode2D(camera);
             player.Draw();
             DrawAnts();
+            DrawBullets();
             Raylib.DrawRectangle((int)MathF.Round(testBlockPosition.X), (int)MathF.Round(testBlockPosition.Y), 50, 50, Color.Blue);
             Raylib.EndMode2D();
         }

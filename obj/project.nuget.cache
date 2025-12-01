@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "lM6pC9M9VNI=",
+  "success": true,
+  "projectFilePath": "C:\\Dev\\ants-shooter\\AntsShooter.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Ibrahim\\.nuget\\packages\\raylib-cs\\7.0.1\\raylib-cs.7.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
