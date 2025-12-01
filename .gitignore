@@ -1,6 +1,5 @@
 .idea/
 .bin/
 .vs/
-obj/
-AntsShooter.sln.DotSettings.user
-todo.txt
+.obj/
+.AntsShooter.sln.DotSettings.user
