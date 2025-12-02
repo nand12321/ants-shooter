@@ -16,8 +16,9 @@ namespace AntsShooter.States
         private List<Ant> Ants;
         private float spawnAntTimer = Globals.spawnAntTimer;
         private List<Bullet> bullets = new();
-        private const float timeBetweenBullets = 0.3f;
+        private const float timeBetweenBullets = 0.1f;
         private float bulletTimer = timeBetweenBullets;
+        private const int bulletRange = 1000;
         
         public PlayState()
         {
@@ -91,27 +92,37 @@ namespace AntsShooter.States
             if (Raylib.IsMouseButtonDown(MouseButton.Left) && bulletTimer <= 0)
             {
                 Vector2 mousePosition = Raylib.GetMousePosition();
-                bullets.Add(new Bullet(player.position, mousePosition));
+
+                bullets.Add(new Bullet(
+                    new Vector2(player.position.X + player.width / 2,
+                                player.position.Y + player.height / 2),
+                    mousePosition));
 
                 bulletTimer = timeBetweenBullets;
             }
 
             if (bulletTimer > 0)
             {
-                bulletTimer -= 1 * Raylib.GetFrameTime();
+                bulletTimer -= Raylib.GetFrameTime();
             }
 
-            foreach (var bullet in bullets)
+            for (int i = bullets.Count - 1; i >= 0; i--)
             {
-                bullet.Update();
+                bullets[i].Update();
 
-                if (bullet.position.X > 10000 || bullet.position.X < -10000 ||
-                    bullet.position.Y > 1000 || bullet.position.Y < -1000)
+                float centerX = player.position.X;
+                float centerY = player.position.Y;
+
+                if (bullets[i].position.X > centerX + bulletRange ||
+                    bullets[i].position.X < centerX - bulletRange ||
+                    bullets[i].position.Y > centerY + bulletRange ||
+                    bullets[i].position.Y < centerY - bulletRange)
                 {
-                    // bullets.Remove(bullet);
+                    bullets.RemoveAt(i);
                 }
             }
-            // Console.WriteLine(bullets.Count());
+
+            Console.WriteLine(bullets.Count);
         }
 
         public void DrawBullets()
