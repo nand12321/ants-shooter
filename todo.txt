@@ -1,4 +1,14 @@
 
 make the player shoots
-make the player dies
+make ants die
+
+
+
+
+
+
+
+
+add lifebar to the ants
+make the player killable
 add a lifebar

@@ -1,3 +1,5 @@
+using System.Numerics;
+using System.Threading.Channels;
 using AntsShooter.Systems;
 using Raylib_cs;
 
@@ -8,6 +10,8 @@ public class Ant : Entity
     private const float speed = 100f;
     private Random random = new Random();
     private int spawnDirection;
+    private int lifebar = 100;
+    public bool isDead = false; 
     
     public Ant()
     {
@@ -31,6 +35,26 @@ public class Ant : Entity
         }
     }
 
+    public bool GetShot(Bullet bullet)
+    {
+        if (Raylib.CheckCollisionCircleRec(bullet.position, bullet.radius, new Rectangle(position, new Vector2(width, height))))
+        {
+            if (lifebar > 0)
+            {
+                lifebar -= 10;
+            }
+            else
+            {
+                isDead = true;
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public override void Update()
     {
         

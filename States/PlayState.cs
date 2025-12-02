@@ -13,7 +13,7 @@ namespace AntsShooter.States
         private Camera2D camera;
         private Vector2 cameraTarget;
         private Vector2 testBlockPosition;
-        private List<Ant> Ants;
+        private List<Ant> ants;
         private float spawnAntTimer = Globals.spawnAntTimer;
         private List<Bullet> bullets = new();
         private const float timeBetweenBullets = 0.1f;
@@ -25,7 +25,7 @@ namespace AntsShooter.States
             player = new Player();
             LoadCamera();
             
-            Ants = new List<Ant>();
+            ants = new List<Ant>();
             
             testBlockPosition = new Vector2(0, 0);
         }
@@ -58,7 +58,7 @@ namespace AntsShooter.States
         private void SpawnAnt()
         {
             Ant ant = new Ant();
-            Ants.Add(ant);
+            ants.Add(ant);
         }
 
         private void UpdateAnts()
@@ -73,7 +73,7 @@ namespace AntsShooter.States
                 spawnAntTimer -= 1 * Raylib.GetFrameTime();   
             }
 
-            foreach (var ant in Ants)
+            foreach (var ant in ants)
             {
                 ant.Follow(player);
             }
@@ -81,7 +81,7 @@ namespace AntsShooter.States
 
         private void DrawAnts()
         {
-            foreach (var ant in Ants)
+            foreach (var ant in ants)
             {
                 ant.Draw();
             }
@@ -106,12 +106,12 @@ namespace AntsShooter.States
                 bulletTimer -= Raylib.GetFrameTime();
             }
 
+            float centerX = player.position.X;
+            float centerY = player.position.Y;
+
             for (int i = bullets.Count - 1; i >= 0; i--)
             {
                 bullets[i].Update();
-
-                float centerX = player.position.X;
-                float centerY = player.position.Y;
 
                 if (bullets[i].position.X > centerX + bulletRange ||
                     bullets[i].position.X < centerX - bulletRange ||
@@ -119,6 +119,20 @@ namespace AntsShooter.States
                     bullets[i].position.Y < centerY - bulletRange)
                 {
                     bullets.RemoveAt(i);
+                    continue;
+                }
+
+                for (int j = ants.Count - 1; j >= 0; j--)
+                {
+                    if (ants[j].isDead)
+                    {
+                        ants.RemoveAt(j);
+                        break;
+                    }
+                    if (ants[j].GetShot(bullets[i]))
+                    {
+                        bullets.RemoveAt(i);
+                    }
                 }
             }
 
